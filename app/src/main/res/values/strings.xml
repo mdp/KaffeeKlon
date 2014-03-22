@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Coffee Cloner</string>
-    <string name="dummy_content">Coffee Cloner</string>
+    <string name="app_name">Kaffee Klon</string>
     <string name="scan_new_card">Clone a different card</string>
-    <string name="title_activity_coffee_card">Coffee Card</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_coffee_card">Kaffee Klon</string>
     <string name="action_settings">Settings</string>
     <string name="clone_new_card">Clone new card</string>
 

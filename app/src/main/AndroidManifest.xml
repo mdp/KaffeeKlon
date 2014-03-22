@@ -9,6 +9,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="im.mdp.coffeecloner.CoffeeCardActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_coffee_card" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,5 +19,7 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

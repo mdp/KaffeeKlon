@@ -14,9 +14,14 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -39,7 +44,29 @@ public class CoffeeCardActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_card);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         showCurrentCard();
+        Button demoMode = (Button) findViewById(R.id.demoMode);
+        demoMode.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(getApplicationContext(), "Demo Mode", Toast.LENGTH_LONG).show();
+                showCard("6123123412341234");
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);  // Add this method.
     }
 
 
@@ -75,7 +102,6 @@ public class CoffeeCardActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
-            Log.d("Coffee", "Isn't null");
             String contents = scanResult.getContents();
             Toast.makeText(getApplicationContext(), contents, Toast.LENGTH_LONG);
             if (contents != null && contents.length() > 0) {
@@ -85,6 +111,8 @@ public class CoffeeCardActivity extends Activity {
     }
 
     protected void showPDF417(String code) {
+        TextView cardNumber = (TextView) findViewById(R.id.cardNumber);
+        cardNumber.setText(code);
         PDF417Writer writer = new PDF417Writer();
         Bitmap mBitmap = null;
         int width = 1500;
@@ -128,6 +156,12 @@ public class CoffeeCardActivity extends Activity {
 
     private void showCurrentCard() {
         String cardNum = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("cardNumber", "");
+        if (cardNum.length() > 0) {
+            showPDF417(cardNum);
+        }
+    }
+
+    private void showCard(String cardNum) {
         if (cardNum.length() > 0) {
             showPDF417(cardNum);
         }
